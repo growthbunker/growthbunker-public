@@ -4,16 +4,16 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@master
-    - name: FTP Deployment
-      uses: SamKirkland/FTP-Deploy-Action@2.0.0
-      env:
-        FTP_SERVER: ipseity.fr
-        FTP_USERNAME: gbipseityfr
-        FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-        ARGS: --delete
-        # --delete arg will delete files on the server if you've deleted them in git
+      - uses: actions/checkout@master
+      - name: FTP Deployment
+        uses: SamKirkland/FTP-Deploy-Action@2.0.0
+        env:
+          FTP_SERVER: ipseity.fr
+          FTP_USERNAME: gbipseityfr
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          LOCAL_DIR: builds
+          ARGS: --delete
+          # --delete arg will delete files on the server if you've deleted them in git
