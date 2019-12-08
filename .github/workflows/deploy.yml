@@ -36,3 +36,13 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           DISTRIBUTION_ID: ${{ secrets.DISTRIBUTION_ID }}
+      - name: Slack Notification
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_CHANNEL: client
+          SLACK_COLOR: '#3278BD'
+          SLACK_ICON: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+          SLACK_MESSAGE: 'The Growth Bunker client has been deployed!'
+          SLACK_TITLE: Deployment
+          SLACK_USERNAME: GitHub
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
