@@ -22,9 +22,39 @@ jobs:
         with:
           args: --acl public-read --follow-symlinks --delete
         env:
-          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          AWS_S3_BUCKET: growthbunker
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: 'eu-west-3'
-          SOURCE_DIR: 'builds'
-          DEST_DIR: 'bundles'
+          AWS_REGION: eu-west-3
+          SOURCE_DIR: builds/
+          DEST_DIR: bundles/
+      - name: CloudFront invalidation
+        uses: awact/cloudfront-action@master
+        env:
+          SOURCE_DIR: ./bundles
+          AWS_REGION: eu-west-3
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          DISTRIBUTION_ID: ${{ secrets.DISTRIBUTION_ID }}
+      - name: Slack success notification
+        if: job.status == 'success'
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_CHANNEL: client
+          SLACK_COLOR: good
+          SLACK_ICON: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+          SLACK_MESSAGE: 'The Growth Bunker client has been deployed!'
+          SLACK_TITLE: Deployment
+          SLACK_USERNAME: GitHub
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      - name: Slack error notification
+        if: job.status == 'failure'
+        uses: rtCamp/action-slack-notify@master
+        env:
+          SLACK_CHANNEL: client
+          SLACK_COLOR: danger
+          SLACK_ICON: https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png
+          SLACK_MESSAGE: 'The Growth Bunker client has failed deploying!'
+          SLACK_TITLE: Deployment
+          SLACK_USERNAME: GitHub
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
