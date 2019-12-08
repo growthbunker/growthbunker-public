@@ -37,7 +37,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           DISTRIBUTION_ID: ${{ secrets.DISTRIBUTION_ID }}
       - name: Slack success notification
-        if: job.status === 'success'
+        if: job.status == 'success'
         uses: rtCamp/action-slack-notify@master
         env:
           SLACK_CHANNEL: client
@@ -48,7 +48,7 @@ jobs:
           SLACK_USERNAME: GitHub
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
       - name: Slack error notification
-        if: job.status === 'failure'
+        if: job.status == 'failure'
         uses: rtCamp/action-slack-notify@master
         env:
           SLACK_CHANNEL: client
